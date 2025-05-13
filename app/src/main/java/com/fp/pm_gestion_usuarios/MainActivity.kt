@@ -64,43 +64,7 @@ fun UsuarioScreen(
     onAgregarUsuario: () -> Unit,
     onCambiarEstado: (Int) -> Unit
 ) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Spacer(modifier = Modifier.height(40.dp))
-        Text("Gestión de Usuarios", style = MaterialTheme.typography.headlineMedium)
-
-        OutlinedTextField(
-            value = uiState.nombre,
-            onValueChange = { onNombreChanged(it) },
-            label = { Text("Nombre del usuario") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Button(
-            onClick = onAgregarUsuario,
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            Text("Agregar")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("Lista de usuarios:")
-
-        LazyColumn {
-            items(uiState.usuarios) { usuario ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("${usuario.nombre} (ID: ${usuario.id}) - ${if (usuario.activo) "Activo" else "Inactivo"}")
-                    Button(onClick = { onCambiarEstado(usuario.id) }) {
-                        Text("Cambiar estado")
-                    }
-                }
-            }
-        }
-    }
+   Text("A implementar por el alumno")
 }
 
 @Preview(showBackground = true)

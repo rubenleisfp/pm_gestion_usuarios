@@ -11,29 +11,16 @@ class GestionUsuarioViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(GestionUsuarioState())
     val uiState: StateFlow<GestionUsuarioState> get() = _uiState
 
-    private val _proximoId = MutableStateFlow(1)
 
     fun onNombreChanged(nuevoNombre: String) {
-        _uiState.value = _uiState.value.copy(nombre = nuevoNombre)
+        throw UnsupportedOperationException("A implementar por el alumno")
     }
 
     fun agregarUsuario() {
-        val nuevoUsuario = Usuario(
-            id = _uiState.value.proximoId,
-            nombre = _uiState.value.nombre
-        )
-        _uiState.value = _uiState.value.copy(usuarios =_uiState.value.usuarios + nuevoUsuario, proximoId = _uiState.value.proximoId+1, nombre = "")
+        throw UnsupportedOperationException("A implementar por el alumno")
     }
 
     fun cambiarEstadoUsuario(id: Int) {
-        val nuevos = mutableListOf<Usuario>()
-        for (usuario in _uiState.value.usuarios) {
-            if (usuario.id == id) {
-                nuevos.add(usuario.copy(activo = !usuario.activo))
-            } else {
-                nuevos.add(usuario)
-            }
-        }
-        _uiState.value = _uiState.value.copy(usuarios = nuevos)
+        throw UnsupportedOperationException("A implementar por el alumno")
     }
 }
