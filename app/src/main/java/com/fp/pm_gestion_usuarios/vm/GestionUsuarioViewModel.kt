@@ -1,14 +1,14 @@
 package com.fp.pm_gestion_usuarios.vm
 
 import androidx.lifecycle.ViewModel
-import com.fp.pm_gestion_usuarios.vm.state.UsuarioState
+import com.fp.pm_gestion_usuarios.vm.state.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class UsuarioViewModel : ViewModel() {
 
-    private val _usuarios = MutableStateFlow<List<UsuarioState>>(emptyList())
-    val usuarios: StateFlow<List<UsuarioState>> get() = _usuarios
+    private val _usuarios = MutableStateFlow<List<Usuario>>(emptyList())
+    val usuarios: StateFlow<List<Usuario>> get() = _usuarios
 
     private val _nombre = MutableStateFlow("")
     val nombre: StateFlow<String> get() = _nombre
@@ -20,7 +20,7 @@ class UsuarioViewModel : ViewModel() {
     }
 
     fun agregarUsuario() {
-        val nuevoUsuario = UsuarioState(
+        val nuevoUsuario = Usuario(
             id = _proximoId.value,
             nombre = _nombre.value
         )
@@ -30,7 +30,7 @@ class UsuarioViewModel : ViewModel() {
     }
 
     fun cambiarEstadoUsuario(id: Int) {
-        val nuevos = mutableListOf<UsuarioState>()
+        val nuevos = mutableListOf<Usuario>()
         for (usuario in _usuarios.value) {
             if (usuario.id == id) {
                 nuevos.add(usuario.copy(activo = !usuario.activo))
