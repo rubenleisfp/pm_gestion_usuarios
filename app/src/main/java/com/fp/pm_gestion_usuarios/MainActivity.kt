@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,7 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,42 +26,40 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fp.pm_gestion_usuarios.ui.theme.Pm_gestion_usuariosTheme
-import com.fp.pm_gestion_usuarios.vm.UsuarioViewModel
-import com.fp.pm_gestion_usuarios.vm.state.UsuarioState
+import com.fp.pm_gestion_usuarios.vm.GestionUsuarioViewModel
+import com.fp.pm_gestion_usuarios.vm.state.GestionUsuarioState
+import com.fp.pm_gestion_usuarios.vm.state.Usuario
 
 class MainActivity : ComponentActivity() {
 
-    private val usuarioViewModel by viewModels<UsuarioViewModel>()
+    private val gestionUsuarioViewModel by viewModels<GestionUsuarioViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Pm_gestion_usuariosTheme {
-                UsuarioApp(usuarioViewModel)
+                UsuarioApp(gestionUsuarioViewModel)
             }
         }
     }
 }
 
 @Composable
-fun UsuarioApp(usuarioViewModel: UsuarioViewModel = viewModel()) {
-    val nombre by usuarioViewModel.nombre.collectAsState()
-    val usuarios by usuarioViewModel.usuarios.collectAsState()
+fun UsuarioApp(gestionUsuarioViewModel: GestionUsuarioViewModel = viewModel()) {
+    val uiState by gestionUsuarioViewModel.uiState.collectAsState()
 
     UsuarioScreen(
-        nombre = nombre,
-        usuarios = usuarios,
-        onNombreChanged = { usuarioViewModel.onNombreChanged(it) },
-        onAgregarUsuario = { usuarioViewModel.agregarUsuario() },
-        onCambiarEstado = { id -> usuarioViewModel.cambiarEstadoUsuario(id) }
+        uiState = uiState,
+        onNombreChanged = { gestionUsuarioViewModel.onNombreChanged(it) },
+        onAgregarUsuario = { gestionUsuarioViewModel.agregarUsuario() },
+        onCambiarEstado = { id -> gestionUsuarioViewModel.cambiarEstadoUsuario(id) }
     )
 }
 
 @Composable
 fun UsuarioScreen(
-    nombre: String,
-    usuarios: List<UsuarioState>,
+    uiState: GestionUsuarioState,
     onNombreChanged: (String) -> Unit,
     onAgregarUsuario: () -> Unit,
     onCambiarEstado: (Int) -> Unit
@@ -73,7 +69,7 @@ fun UsuarioScreen(
         Text("Gestión de Usuarios", style = MaterialTheme.typography.headlineMedium)
 
         OutlinedTextField(
-            value = nombre,
+            value = uiState.nombre,
             onValueChange = { onNombreChanged(it) },
             label = { Text("Nombre del usuario") },
             modifier = Modifier.fillMaxWidth()
@@ -90,7 +86,7 @@ fun UsuarioScreen(
         Text("Lista de usuarios:")
 
         LazyColumn {
-            items(usuarios) { usuario ->
+            items(uiState.usuarios) { usuario ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -110,14 +106,16 @@ fun UsuarioScreen(
 @Preview(showBackground = true)
 @Composable
 fun UsuarioScreenPreview() {
+
     val usuariosFake = listOf(
-        UsuarioState(id = 1, nombre = "Ana", activo = true),
-        UsuarioState(id = 2, nombre = "Pedro", activo = false)
+        Usuario(id = 1, nombre = "Ana", activo = true),
+        Usuario(id = 2, nombre = "Pedro", activo = false)
     )
+    val uiState = GestionUsuarioState(usuarios = usuariosFake)
+
 
     UsuarioScreen(
-        nombre = "Nuevo usuario",
-        usuarios = usuariosFake,
+        uiState = uiState,
         onNombreChanged = {},
         onAgregarUsuario = {},
         onCambiarEstado = {}
